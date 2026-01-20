@@ -83,7 +83,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ft_fashion_backend.wsgi.application'
 
-DB_LIVE = os.environ('DB_LIVE')
+# DB_LIVE = os.environ('DB_LIVE')
+DB_LIVE = os.environ.get('DB_LIVE')
+
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
