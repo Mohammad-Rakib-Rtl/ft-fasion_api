@@ -1,4 +1,5 @@
 # ---- imports (top of file) ----
+from urllib import response
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,6 +14,9 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer, Image
 from reportlab.lib.units import inch
 import os
+
+from django.http import HttpResponse
+
 
 # ---- function begins here ----
 @api_view(['POST'])
@@ -80,11 +84,14 @@ def checkout(request):
             subtotal = item.product.price * item.quantity
 
             # Product image cell
-            image_path = item.product.image.path if item.product.image else None
-            if image_path and os.path.exists(image_path):
-                img = Image(image_path, width=0.7*inch, height=0.7*inch)
-            else:
-                img = Paragraph("-", styles["Normal"])
+            # image_path = item.product.image.path if item.product.image else None
+            # if image_path and os.path.exists(image_path):
+            #     img = Image(image_path, width=0.7*inch, height=0.7*inch)
+            # else:
+            #     img = Paragraph("-", styles["Normal"])
+
+            img = Paragraph("-", styles["Normal"])
+
 
             # Product name with word wrapping
             product_name_text = item.product.name
@@ -133,25 +140,30 @@ def checkout(request):
         pdf_bytes = buffer.getvalue()
         buffer.close()
 
-        email = EmailMessage(
-        subject=f"New Order Invoice #{order.code}",
-        body="Please find attached the new client invoice.",
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=["jwdjp.abc@gmail.com"],
-        )
-        email.attach(f"invoice_{order.code}.pdf", pdf_bytes, "application/pdf")
-        # email.send(fail_silently=True)
-        try:
-            email.send(fail_silently=True)
-        except Exception as e:
-            print("EMAIL ERROR:", e)
+        # email = EmailMessage(
+        # subject=f"New Order Invoice #{order.code}",
+        # body="Please find attached the new client invoice.",
+        # from_email=settings.DEFAULT_FROM_EMAIL,
+        # to=["jwdjp.abc@gmail.com"],
+        # )
+        # email.attach(f"invoice_{order.code}.pdf", pdf_bytes, "application/pdf")
+        # # email.send(fail_silently=True)
+        # try:
+        #     email.send(fail_silently=True)
+        # except Exception as e:
+        #     print("EMAIL ERROR:", e)
+        print("Checkout completed — email skipped to avoid worker timeout")
 
 
-        return Response({
-            "message": "Order processed successfully.",
-            "order_code": str(order.code),
-            "pdf": pdf_bytes.hex()
-        }, status=status.HTTP_201_CREATED)
+        # return Response({
+        #     "message": "Order processed successfully.",
+        #     "order_code": str(order.code),
+        #     "pdf": pdf_bytes.hex()
+        # }, status=status.HTTP_201_CREATED)
+
+        response = HttpResponse(pdf_bytes, content_type="application/pdf")
+        response["Content-Disposition"] = f'attachment; filename="invoice_{order.code}.pdf"'
+        return response
 
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
