@@ -83,7 +83,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ft_fashion_backend.wsgi.application'
 
-DB_LIVE = os.getenviron('DB_LIVE')
+DB_LIVE = os.environ('DB_LIVE')
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -100,11 +100,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenviron('DB_NAME'),
-            'USER': os.getenviron('DB_USER'),
-            'PASSWORD': os.getenviron('DB_PASSWORD'),
-            'HOST': os.getenviron('DB_HOST'),
-            'PORT': os.getenviron('DB_PORT'),
+            'NAME': os.environ('DB_NAME'),
+            'USER': os.environ('DB_USER'),
+            'PASSWORD': os.environ('DB_PASSWORD'),
+            'HOST': os.environ('DB_HOST'),
+            'PORT': os.environ('DB_PORT'),
         }
     }
 
