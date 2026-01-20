@@ -30,6 +30,7 @@ SECRET_KEY = 'django-insecure-5cjw(sz^j@g(j=r(zikoe(-g8kq0ahe8k9^a6xrmkwc$!1$um*
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS=["https://ft-fasionapi-production.up.railway.app", "http://127.0.0.1:8000"]
 
 
 # Application definition
