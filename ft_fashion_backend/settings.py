@@ -28,7 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5cjw(sz^j@g(j=r(zikoe(-g8kq0ahe8k9^a6xrmkwc$!1$um*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
 
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS=["https://ft-fasionapi-production.up.railway.app", "http://127.0.0.1:8000"]
@@ -85,36 +86,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ft_fashion_backend.wsgi.application'
 
-# DB_LIVE = os.environ('DB_LIVE')
-# DB_LIVE = os.environ.get('DB_LIVE')
 
 
-# # Database
-# # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# # ✅ Load database depending on environment
-# DB_LIVE = os.environ.get('DB_LIVE', 'False')
 
-# if DB_LIVE in ["False", False, None, ""]:  # local
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': BASE_DIR / 'db.sqlite3',
-#         }
-#     }
-# else:  # live PostgreSQL on Railway
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': os.environ.get('DB_NAME'),
-#             'USER': os.environ.get('DB_USER'),
-#             'PASSWORD': os.environ.get('DB_PASSWORD'),
-#             'HOST': os.environ.get('DB_HOST'),
-#             'PORT': os.environ.get('DB_PORT'),
-#         }
-#     }
+# Database
+# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
+# ✅ Load database depending on environment
+
+DB_LIVE = os.environ.get("DB_LIVE", "False") == "True"
+
+
+if DB_LIVE in ["False", False, None, ""]:  # local
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:  # live PostgreSQL on Railway
+    DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('DB_NAME'),
@@ -125,7 +117,23 @@ DATABASES = {
         }
     }
 
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.environ.get('DB_NAME'),
+#             'USER': os.environ.get('DB_USER'),
+#             'PASSWORD': os.environ.get('DB_PASSWORD'),
+#             'HOST': os.environ.get('DB_HOST'),
+#             'PORT': os.environ.get('DB_PORT'),
+#         }
+#     }
 
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 
 
