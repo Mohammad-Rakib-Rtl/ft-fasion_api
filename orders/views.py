@@ -140,7 +140,12 @@ def checkout(request):
         to=["jwdjp.abc@gmail.com"],
         )
         email.attach(f"invoice_{order.code}.pdf", pdf_bytes, "application/pdf")
-        email.send(fail_silently=True)
+        # email.send(fail_silently=True)
+        try:
+            email.send(fail_silently=True)
+        except Exception as e:
+            print("EMAIL ERROR:", e)
+
 
         return Response({
             "message": "Order processed successfully.",
